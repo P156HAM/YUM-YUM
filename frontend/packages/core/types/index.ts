@@ -1,14 +1,14 @@
 export enum SizeTypes {
-  'REGULAR' = 'regular',
-  'SMALL' = 'small',
-  'MEDIUM' = 'medium',
-  'LARGE' = 'large',
+  "REGULAR" = "regular",
+  "SMALL" = "small",
+  "MEDIUM" = "medium",
+  "LARGE" = "large",
 }
 
 export enum StyleTypes {
-  'DEFAULT' = 'default',
-  'DARK' = 'dark',
-  'LIGHT' = 'light',
+  "DEFAULT" = "default",
+  "DARK" = "dark",
+  "LIGHT" = "light",
 }
 
 export interface BaseProduct {
@@ -37,7 +37,6 @@ export interface WontonItem {
 }
 
 export interface DipItem {
-  //index: number;
   name: string;
   desc: string;
   price: number;
@@ -65,13 +64,13 @@ export interface OrderItem {
 }
 
 export enum OrderStatus {
-  Pending = 'Pending',
-  Preparing = 'Preparing',
-  ReadyForDelivery = 'ReadyForDelivery',
-  Delivered = 'Delivered',
+  Pending = "Pending",
+  Preparing = "Preparing",
+  ReadyForDelivery = "ReadyForDelivery",
+  Delivered = "Delivered",
 }
 
 export enum CartButtonStyles {
-  'MENU' = 'menu',
-  'CART' = 'cart',
+  "MENU" = "menu",
+  "CART" = "cart",
 }

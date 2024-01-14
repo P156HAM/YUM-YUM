@@ -1,0 +1,4 @@
+{
+  "name": "@zocom/ai-chat",
+  "main": "./index.ts"
+}

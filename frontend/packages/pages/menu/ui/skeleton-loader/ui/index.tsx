@@ -1,4 +1,5 @@
 import "./style.scss";
+import React from "react";
 
 type SkeletonLoaderProps = {
   type: string;
