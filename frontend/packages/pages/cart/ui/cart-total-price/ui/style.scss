@@ -1,0 +1,27 @@
+@use '@zocom/styles' as *;
+
+.cart-total-price {
+  display: flex;
+  justify-content: space-between;
+  @include row;
+  width: 100%;
+  border-radius: $radius-tier-2;
+  background-color: $shade-24-dark;
+  color: $coal;
+  padding: $padding;
+  align-items: center;
+  margin-bottom: $baseline;
+}
+
+.cart-text-size-large {
+  @include fontsizeLarge;
+}
+
+.cart-text-size-medium {
+  @include fontsizeRegular;
+}
+
+.cart-text-size-small {
+  @include fontsizeSmall;
+  font-weight: 500;
+}

@@ -1,0 +1,15 @@
+@use '@zocom/styles' as *;
+
+.menu-container {
+  @include center;
+  justify-content: flex-start;
+  background-color: $clay;
+  margin: $margin;
+}
+
+.menu-heading {
+  @include fontsizeVeryLarge;
+  align-self: flex-start;
+  color: $snow;
+  padding: $padding;
+}
