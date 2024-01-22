@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { MenuList } from "@zocom/types";
-import { agent } from "@zocom/ai-chat";
+import { agent, userPhoto, chefPhoto, closeLogo } from "@zocom/ai-chat";
 import "./style.scss";
 
 export const FoodRecommender = ({ menu }: { menu: MenuList }) => {
@@ -8,14 +8,6 @@ export const FoodRecommender = ({ menu }: { menu: MenuList }) => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [recommendations, setRecommendations] = useState<Recommendations[]>([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [botMessage, setBotMessage] = useState(
-    "Hello, I am your food assistant. Tell me what ingredients you like."
-  );
-
-  useEffect(() => {
-    // Initiate conversation with the bot message
-    setChatHistory([{ user: false, text: botMessage }]);
-  }, [botMessage]);
 
   type ChatMessage = {
     user: boolean;
@@ -35,29 +27,24 @@ export const FoodRecommender = ({ menu }: { menu: MenuList }) => {
     e.preventDefault();
     if (!userInput.trim()) return;
 
-    setChatHistory((prevHistory) => [
-      ...prevHistory,
-      { user: true, text: userInput },
-    ]);
+    let nextBotMessage = "";
 
+    // Process user input
     if (userInput.toLowerCase() === "hello") {
-      setBotMessage(
-        "I can help you choose what to eat. Please tell me what ingredients you like."
-      );
+      nextBotMessage =
+        "Hello! I am YUMYUM chef. I can help you choose what to eat. Please tell me what ingredients you like.";
     } else {
       // Call the API for recommendations
       const apiResponse = await agent(userInput);
-      if (apiResponse) {
-        // Here, you can decide how to handle multiple drafts. For simplicity, I'm using the first one.
-        setBotMessage(apiResponse);
-      } else {
-        setBotMessage("I couldn't find any recommendationsat the moment.");
-      }
-    } // Update chat history with the new bot message
+      nextBotMessage =
+        apiResponse || "I couldn't find any recommendations at the moment.";
+    }
     setChatHistory((prevHistory) => [
       ...prevHistory,
-      { user: false, text: botMessage },
+      { user: true, text: userInput },
+      { user: false, text: nextBotMessage },
     ]);
+
     setUserInput("");
   };
 
@@ -93,13 +80,29 @@ export const FoodRecommender = ({ menu }: { menu: MenuList }) => {
     <div className="food-recommender">
       {isChatOpen ? (
         <div className="chat-box">
+          <header className="chat-header">
+            <img
+              className="close-chat"
+              src={closeLogo}
+              onClick={() => setIsChatOpen(false)}
+            />
+          </header>
           <div className="chat-history">
             {chatHistory.map((message, index) => (
               <div
                 key={index}
-                className={`message ${message.user ? "user" : "bot"}`}
+                className={`message-row ${
+                  message.user ? "user-row" : "bot-row"
+                }`}
               >
-                {message.text}
+                <img
+                  src={message.user ? userPhoto : chefPhoto}
+                  alt={message.user ? "User" : "Bot"}
+                  className="message-photo"
+                />
+                <div className={`message ${message.user ? "user" : "bot"}`}>
+                  {message.text}
+                </div>
               </div>
             ))}
             {recommendations.map((rec, index) => (
@@ -113,7 +116,7 @@ export const FoodRecommender = ({ menu }: { menu: MenuList }) => {
               type="text"
               value={userInput}
               onChange={handleInputChange}
-              placeholder="Enter ingredients..."
+              placeholder="Enter your message here"
             />
             <button type="submit">Send</button>
           </form>
