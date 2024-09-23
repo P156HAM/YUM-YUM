@@ -1,0 +1,9 @@
+[build]
+  base    = "frontend"  # path to the frontend folder
+  publish = "frontend/build"  # path to the build output
+  command = "npm run build"  # or the appropriate build command
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
