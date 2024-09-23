@@ -1,7 +1,7 @@
-import './style.scss';
-import { useState, useEffect } from 'react';
-import { OrderStatus } from '@zocom/types';
-import { calculateElapsedTime } from '@zocom/dashboard-page';
+import "./style.scss";
+import { useState, useEffect } from "react";
+import { OrderStatus } from "@zocom/types";
+import { calculateElapsedTime } from "@zocom/dashboard-page";
 
 interface DashboardTimerProps {
   startTime: string;
@@ -16,7 +16,7 @@ export const DashboardTimer = ({
   orderStatus,
   orderId,
 }: DashboardTimerProps) => {
-  const [elapsedTime, setElapsedTime] = useState('');
+  const [elapsedTime, setElapsedTime] = useState("");
   const [toBeCookedTime, setToBeCookedTime] = useState(true);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const DashboardTimer = ({
     setElapsedTime(savedTime);
 
     // Update elapsed time every second
-    let interval: number;
+    let interval: any;
 
     if (orderStatus === OrderStatus.Pending) {
       setToBeCookedTime(false);
@@ -46,7 +46,7 @@ export const DashboardTimer = ({
     toBeCooked = false;
   }
   return (
-    <div className='dashboard-timer'>
+    <div className="dashboard-timer">
       {toBeCooked ? `VÄNTAT I ${elapsedTime}` : `TILLAGNINGSTID ${elapsedTime}`}
     </div>
   );

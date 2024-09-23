@@ -1,2 +1,1 @@
-import { ReactNode } from 'react';
-import './style.scss';
+import "./style.scss";

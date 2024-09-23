@@ -64,8 +64,6 @@ export async function agent(userInput: string) {
     if (finish_reason === "tool_calls" && message.tool_calls) {
       const functionName = message.tool_calls[0].function.name;
       const functionToCall = fetchMenu;
-      const functionArgs = JSON.parse(message.tool_calls[0].function.arguments);
-      const functionArgsArr = Object.values(functionArgs);
       const functionResponse = await functionToCall.apply(null);
 
       messages.push({
@@ -90,77 +88,3 @@ const response = await agent(
 );
 
 console.log("response:", response);
-
-//
-
-// export const fetchRecommendations = async (input: string, menu: MenuList) => {
-//   const menuContext = createMenuContext(menu);
-//   const completeQuestion = `${menuContext} Based on the following ingredients: ${input}, what would you recommend?`;
-
-//   const url = "https://chatgpt-42.p.rapidapi.com/conversationgpt4";
-//   const options = {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "X-RapidAPI-Key": "d9c4b149f7msh362415cf73c0f6ap1a25f2jsnd103b349832c",
-//       "X-RapidAPI-Host": "chatgpt-42.p.rapidapi.com",
-//     },
-//     body: JSON.stringify({
-//       messages: [
-//         {
-//           role: "user",
-//           content: completeQuestion,
-//         },
-//       ],
-//       system_prompt: "",
-//       temperature: 0.9,
-//       top_k: 5,
-//       top_p: 0.9,
-//       max_tokens: 256,
-//       web_access: false,
-//     }),
-//   };
-
-//   try {
-//     const response = await fetch(url, options);
-//     const result = await response.json();
-//     console.log("API Response:", result);
-//     return result;
-//   } catch (error) {
-//     console.error("Error fetching recommendations:", error);
-//     return null;
-//   }
-// };
-
-// async function main() {
-//   const completion = await openai.chat.completions.create({
-//     messages: [{ role: "system", content: "You are a helpful assistant." }],
-//     model: "gpt-3.5-turbo",
-//   });
-
-//   console.log(completion.choices[0]);
-// }
-
-// main();
-
-// const createMenuContext = (menu: MenuList) => {
-//   let context =
-//     "Our restaurant specializes in a variety of wonton dishes and dips. Some of our popular dishes include: ";
-
-//   menu.wonton.forEach((wonton) => {
-//     context += `${
-//       wonton.name
-//     }, made with ingredients like ${wonton.ingredients?.join(", ")}. `;
-//   });
-
-//   context += "We also offer a selection of dips such as ";
-
-//   menu.dip.forEach((dip, index, array) => {
-//     context += dip.name;
-//     if (index < array.length - 1) {
-//       context += ", ";
-//     }
-//   });
-
-//   return context + ".";
-// };

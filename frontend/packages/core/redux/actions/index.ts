@@ -1,33 +1,26 @@
-import { WontonItem, DipItem } from '@zocom/types';
+import { WontonItem, DipItem } from "@zocom/types";
+import { createAction } from "@reduxjs/toolkit";
 
-export const addItem = (
-  item: WontonItem | DipItem,
-  itemType: 'wonton' | 'dip'
-) => ({
-  type: 'ADD_TO_CART',
-  payload: { item, itemType },
-});
+// Use action creators provided by Redux Toolkit
+export const addItem = createAction(
+  "ADD_TO_CART",
+  (item: WontonItem | DipItem, itemType: "wonton" | "dip") => ({
+    payload: { item, itemType },
+  })
+);
 
-export const decrease = (
-  item: WontonItem | DipItem,
-  itemType: 'wonton' | 'dip'
-) => ({
-  type: 'DECREASE',
-  payload: { item, itemType },
-});
+export const decrease = createAction(
+  "DECREASE",
+  (item: WontonItem | DipItem, itemType: "wonton" | "dip") => ({
+    payload: { item, itemType },
+  })
+);
 
-export const increase = (
-  item: WontonItem | DipItem,
-  itemType: 'wonton' | 'dip'
-) => ({
-  type: 'INCREASE',
-  payload: { item, itemType },
-});
+export const increase = createAction(
+  "INCREASE",
+  (item: WontonItem | DipItem, itemType: "wonton" | "dip") => ({
+    payload: { item, itemType },
+  })
+);
 
-export const clearCart = (
-  item: WontonItem | DipItem,
-  itemType: 'wonton' | 'dip'
-) => ({
-  type: 'CLEAR_CART',
-  payload: { item, itemType },
-});
+export const clearCart = createAction("CLEAR_CART");

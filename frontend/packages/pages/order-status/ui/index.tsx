@@ -1,22 +1,22 @@
-import './style.scss';
-import { img } from '@zocom/status-img';
-import { Status } from '@zocom/status';
-import { TopBar } from '@zocom/top-bar';
-import { Styles, Wrapper } from '@zocom/wrapper';
-import { ButtonType, Button } from '@zocom/button';
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import "./style.scss";
+import { img } from "@zocom/status-img";
+import { Status } from "@zocom/status";
+import { TopBar } from "@zocom/top-bar";
+import { Styles, Wrapper } from "@zocom/wrapper";
+import { ButtonType, Button } from "@zocom/button";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function notifyMe() {
-  if (!('Notification' in window)) {
-    alert('This browser does not support desktop notification');
-  } else if (Notification.permission === 'granted') {
-    const notification = new Notification('Din order är redo!');
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  } else if (Notification.permission === "granted") {
+    // const notification = new Notification('Din order är redo!');
     // …
-  } else if (Notification.permission !== 'denied') {
+  } else if (Notification.permission !== "denied") {
     Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        const notification = new Notification('Din order är redo!');
+      if (permission === "granted") {
+        // const notification = new Notification('Din order är redo!');
         // …
       }
     });
@@ -55,13 +55,13 @@ export const OrderStatusPage = () => {
         orderNr={`#${orderId}`}
         orderReady={orderReady}
       />
-      <div className='status__button-container'>
-        <Button type={ButtonType.REGULAR} onClick={() => navigate('/')}>
+      <div className="status__button-container">
+        <Button type={ButtonType.REGULAR} onClick={() => navigate("/")}>
           BESTÄLL MER
         </Button>
         <Button
           type={ButtonType.INVERTED}
-          onClick={() => navigate('/receipt', { state: orderItem })}
+          onClick={() => navigate("/receipt", { state: orderItem })}
         >
           SE KVITTO
         </Button>

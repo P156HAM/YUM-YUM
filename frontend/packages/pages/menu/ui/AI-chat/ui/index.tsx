@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { MenuList } from "@zocom/types";
 import { agent, userPhoto, chefPhoto, closeLogo } from "@zocom/ai-chat";
 import "./style.scss";
@@ -38,7 +38,11 @@ export const FoodRecommender = ({ menu }: { menu: MenuList }) => {
       const apiResponse = await agent(userInput);
       nextBotMessage =
         apiResponse || "I couldn't find any recommendations at the moment.";
+
+      // Call recommendDishes with the user input
+      recommendDishes(userInput);
     }
+
     setChatHistory((prevHistory) => [
       ...prevHistory,
       { user: true, text: userInput },

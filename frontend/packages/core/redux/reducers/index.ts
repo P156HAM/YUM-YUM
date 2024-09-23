@@ -1,4 +1,6 @@
-import { MenuList, WontonItem, DipItem } from '@zocom/types';
+import { createReducer, PayloadAction } from "@reduxjs/toolkit";
+import { MenuList, WontonItem, DipItem } from "@zocom/types";
+import { addItem, increase, decrease, clearCart } from "@zocom/cart-actions";
 
 interface CartState {
   menuList: MenuList;
@@ -11,23 +13,18 @@ const initialState: CartState = {
   },
 };
 
-type MenuItemType = WontonItem | DipItem;
-
-interface Action {
-  type: string;
-  payload: {
-    item: MenuItemType;
-    itemType: 'wonton' | 'dip';
-  };
-}
-
-export default function cartReducer(
-  state: CartState = initialState,
-  action: Action
-): CartState {
-  switch (action.type) {
-    case 'ADD_TO_CART':
-      if (action.payload) {
+// Use the createReducer helper function to simplify the reducer
+const cartReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(
+      addItem,
+      (
+        state,
+        action: PayloadAction<{
+          item: WontonItem | DipItem;
+          itemType: "wonton" | "dip";
+        }>
+      ) => {
         const { item, itemType } = action.payload;
         const existingItems = state.menuList[itemType];
         const existingItemIndex = existingItems.findIndex(
@@ -35,99 +32,58 @@ export default function cartReducer(
         );
 
         if (existingItemIndex !== -1) {
-          // Item already exists in the cart, update its quantity
-          const updatedItems = existingItems.map((i, index) =>
-            index === existingItemIndex ? { ...i, quantity: i.quantity + 1 } : i
-          );
-          return {
-            ...state,
-            menuList: {
-              ...state.menuList,
-              [itemType]: updatedItems,
-            },
-          };
+          // Update existing item's quantity
+          existingItems[existingItemIndex].quantity += 1;
         } else {
-          // New item, add to the cart
-          return {
-            ...state,
-            menuList: {
-              ...state.menuList,
-              [itemType]: [...existingItems, { ...item, quantity: 1 }],
-            },
-          };
+          // Add new item with quantity 1
+          existingItems.push({ ...item, quantity: 1 });
         }
       }
-      return state;
-
-    case 'INCREASE':
-      if (action.payload) {
+    )
+    .addCase(
+      increase,
+      (
+        state,
+        action: PayloadAction<{
+          item: WontonItem | DipItem;
+          itemType: "wonton" | "dip";
+        }>
+      ) => {
         const { item, itemType } = action.payload;
-        const items = state.menuList[itemType];
-        const index = items.findIndex((i) => i.name === item.name);
-
+        const existingItems = state.menuList[itemType];
+        const index = existingItems.findIndex((i) => i.name === item.name);
         if (index !== -1) {
-          const updatedItems = items.map((i, idx) =>
-            idx === index ? { ...i, quantity: i.quantity + 1 } : i
-          );
-          return {
-            ...state,
-            menuList: {
-              ...state.menuList,
-              [itemType]: updatedItems,
-            },
-          };
+          existingItems[index].quantity += 1;
         }
       }
-      return state;
-
-    case 'DECREASE':
-      if (action.payload) {
+    )
+    .addCase(
+      decrease,
+      (
+        state,
+        action: PayloadAction<{
+          item: WontonItem | DipItem;
+          itemType: "wonton" | "dip";
+        }>
+      ) => {
         const { item, itemType } = action.payload;
-        const items = state.menuList[itemType];
-        const index = items.findIndex((i) => i.name === item.name);
-
+        const existingItems = state.menuList[itemType];
+        const index = existingItems.findIndex((i) => i.name === item.name);
         if (index !== -1) {
-          const itemToUpdate = items[index];
-          if (itemToUpdate.quantity > 1) {
-            // Decrease the quantity
-            const updatedItems = items.map((i, idx) =>
-              idx === index ? { ...i, quantity: i.quantity - 1 } : i
-            );
-            return {
-              ...state,
-              menuList: {
-                ...state.menuList,
-                [itemType]: updatedItems,
-              },
-            };
+          const currentQuantity = existingItems[index].quantity;
+          if (currentQuantity > 1) {
+            existingItems[index].quantity -= 1;
           } else {
-            // Remove the item as its quantity will become 0
-            return {
-              ...state,
-              menuList: {
-                ...state.menuList,
-                [itemType]: [
-                  ...items.slice(0, index),
-                  ...items.slice(index + 1),
-                ],
-              },
-            };
+            // Remove item from the list
+            existingItems.splice(index, 1);
           }
         }
       }
-      return state;
+    )
+    .addCase(clearCart, (state) => {
+      state.menuList.wonton = [];
+      state.menuList.dip = [];
+    });
+});
 
-    case 'CLEAR_CART':
-      return {
-        ...state,
-        menuList: {
-          wonton: [],
-          dip: [],
-        },
-      };
-      return state;
-
-    default:
-      return state;
-  }
-}
+export default cartReducer;
