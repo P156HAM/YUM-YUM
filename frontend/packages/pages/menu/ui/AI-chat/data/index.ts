@@ -1,7 +1,7 @@
-//note to self: the call only works when the API-key is provided as a string, this needs to be further devoloped.
 import { MenuList } from "@zocom/types";
 import OpenAI from "openai";
 
+// Initialize OpenAI
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
@@ -47,6 +47,7 @@ const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
   },
 ];
 
+// Agent function for handling user input and interacting with the OpenAI API
 export async function agent(userInput: string) {
   messages.push({
     role: "user",
@@ -64,7 +65,7 @@ export async function agent(userInput: string) {
     if (finish_reason === "tool_calls" && message.tool_calls) {
       const functionName = message.tool_calls[0].function.name;
       const functionToCall = fetchMenu;
-      const functionResponse = await functionToCall.apply(null);
+      const functionResponse = await functionToCall();
 
       messages.push({
         role: "function",
@@ -83,8 +84,13 @@ export async function agent(userInput: string) {
   return "The maximum number of iterations has been met without a suitable answer. Please try again with a more specific input.";
 }
 
-const response = await agent(
-  "Please suggest some activities based on my location and the weather."
-);
+// Wrap the top-level call to `agent` inside an async function
+async function runAgent() {
+  const response = await agent(
+    "Please suggest some activities based on my location and the weather."
+  );
+  console.log("response:", response);
+}
 
-console.log("response:", response);
+// Call the async function
+runAgent();
